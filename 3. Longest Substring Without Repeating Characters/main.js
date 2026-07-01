@@ -7,14 +7,15 @@ var lengthOfLongestSubstring = function (s) {
 
   let lp = 0;
   let maxCount = 1;
-  let letters = new Map();
+  let letters = new Set();
 
   for (let rp = 0; rp < s.length; ++rp) {
-    if (letters.has(s[rp]) && letters.get(s[rp]) >= lp) {
-      lp = letters.get(s[rp]) + 1;
+    while (letters.has(s[rp])) {
+      letters.delete(s[lp]);
+      ++lp;
     }
 
-    letters.set(s[rp], rp);
+    letters.add(s[rp]);
     maxCount = Math.max(maxCount, rp - lp + 1);
   }
 
