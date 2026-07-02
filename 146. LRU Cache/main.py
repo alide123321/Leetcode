@@ -2,14 +2,12 @@ class LRUCache:
 
     def __init__(self, capacity: int):
         self.CAP = capacity
-        self.cache = {}
-        self.dq = deque()
+        self.cache = OrderedDict()
         
 
     def get(self, key: int) -> int:
         if key in self.cache: 
-            self.dq.remove(key)
-            self.dq.append(key)
+            self.cache.move_to_end(key)
             return self.cache[key]
         
         return -1
@@ -17,17 +15,14 @@ class LRUCache:
 
     def put(self, key: int, value: int) -> None:
         if key in self.cache:
-            self.dq.remove(key)
-            self.dq.append(key)
+            self.cache.move_to_end(key)
             self.cache[key] = value
             return
 
-        if len(self.dq) >= self.CAP:
-            removeKey = self.dq.popleft()
-            self.cache.pop(removeKey, None)
+        if len(self.cache) >= self.CAP:
+            self.cache.popitem(last=False)
         
         self.cache[key] = value
-        self.dq.append(key)
         
 
 # Your LRUCache object will be instantiated and called as such:
